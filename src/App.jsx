@@ -8,6 +8,8 @@ import Signup from './components/Signup1';
 import Login from './components/Login1';
 import HomePage from './components/Homepage';
 import Instruction from './components/Homepagecomp/Instrcution';
+import Level from './components/Homepagecomp/Level';
+import Leaderboard from './components/Homepagecomp/Leaderboard';
 // Assuming Loading component image path is correct now
 // e.g., import defaultPikachuGif from './components/pikachu-pokemon.gif'; in Loading.jsx
 // or using public folder: src="/pikachu-pokemon.gif"
@@ -75,7 +77,9 @@ const App = () => {
 
       {/* Instruction Page Route */}
       <Route path="/instructions" element={<Instruction />} /> {/* <--- ADD THIS LINE */}
-
+{/*level*/}
+<Route path="/level" element={<Level/>}/> {/* <--- ADD THIS LINE */}
+<Route path="/leaderboard" element={<Leaderboard />} /> {/* <--- Add Leaderboard Route */}
       {/* Optional but Recommended: Add a 404 Not Found Route */}
       {/* <Route path="*" element={<div><h1>404 - Page Not Found</h1><Link to="/">Go Home</Link></div>} /> */}
     </Routes>

@@ -7,7 +7,7 @@ const Centre = () => {
   // --- Navigation Handlers ---
   const handlePlayGameClick = () => {
     // Navigate to the actual game route (you'll need to define this route in App.jsx)
-    navigate("/game");
+    navigate("/level");
   };
 
   const handleInstructionsClick = () => {
