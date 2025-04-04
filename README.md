@@ -1,2 +1,0 @@
-# Code-Ninjas
-Hackfest repository
