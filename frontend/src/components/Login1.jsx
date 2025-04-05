@@ -28,7 +28,11 @@ const Login = ({ src, alt }) => {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Login failed');
       }
-
+      const data = await response.json();
+      const { userId } = data; // adjust based on your backend response shape
+  
+      // Store userId in localStorage or sessionStorage
+      localStorage.setItem('userId', userId);
       // Assuming login is successful, navigate to homepage
       navigate('/homepage');
     } catch (error) {

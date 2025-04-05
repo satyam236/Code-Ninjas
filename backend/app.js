@@ -7,10 +7,10 @@ import battleRoutes from './routes/battleRoutes.js';
 import leaderboardRoutes from './routes/leaderboardRoutes.js';
 import cors from 'cors';
 
-const app = express();
+const app = express(); 
+ 
 
-
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'; // <-- Correct frontend origin
 
 const corsOptions = {
   origin: CLIENT_ORIGIN,
@@ -18,13 +18,12 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   optionsSuccessStatus: 204,
-  maxAge: 86400 
+  maxAge: 86400  
 };
 
-
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
-app.options('*', cors(corsOptions)); 
 
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
