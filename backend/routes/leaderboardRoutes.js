@@ -4,7 +4,6 @@ import { getLeaderboard } from '../controllers/leaderboardController.js';
 
 const router = express.Router();
 
-// Leaderboard route
 router.get('/', getLeaderboard);
 
 export default router;

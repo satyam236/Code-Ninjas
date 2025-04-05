@@ -1,9 +1,8 @@
-// src/components/Signup1.jsx (Updated for internal navigation)
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
-const Signup = ({ src, alt }) => { // Removed onSubmit, onLoginClick props
-  const navigate = useNavigate(); // Get the navigate function
+const Signup = ({ src, alt }) => { 
+  const navigate = useNavigate(); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,7 +13,7 @@ const Signup = ({ src, alt }) => { // Removed onSubmit, onLoginClick props
   };
 
   const handleLoginClick = () => {
-    navigate('/login'); // Navigate to login page
+    navigate('/login'); 
   };
 
   return (
@@ -28,7 +27,7 @@ const Signup = ({ src, alt }) => { // Removed onSubmit, onLoginClick props
           type="text"
           placeholder="Full Name"
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          required // Good practice to add required
+          required 
         />
         <input
           type="email"

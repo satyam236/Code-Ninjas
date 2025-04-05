@@ -13,31 +13,14 @@ import {
 
 const router = express.Router();
 
-// Start or resume a game session
 router.post('/start', startGame);
-
-// Fetch level data
 router.post('/level', getLevel);
-
-// Submit answer for a level
 router.post('/submit', submitAnswer);
-
-// Pause the game session
-router.post('/pause', pauseGame);
-
-// Resume the paused game session
-router.post('/resume', resumeGame);
-
-// Get all unlocked levels and progress
-router.post('/levels', getAllLevels);
-
-// New route for profile
+// router.post('/pause', pauseGame);
+// router.post('/resume', resumeGame);
+// router.post('/levels', getAllLevels);
 router.post('/profile', getProfile);
-
-// New route for hints
 router.post('/hint', getHint);
-
-// New route for quit level
 router.post('/quit', quitLevel);
 
 

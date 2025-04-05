@@ -2,7 +2,6 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-// Signup Controller
 export const signup = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -15,7 +14,6 @@ export const signup = async (req, res) => {
   }
 };
 
-// Login Controller
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -33,7 +31,6 @@ export const login = async (req, res) => {
   }
 };
 
-// Logout Controller
 export const logout = async (req, res) => {
   res.status(200).json({ message: "Logged out successfully!" });
 };

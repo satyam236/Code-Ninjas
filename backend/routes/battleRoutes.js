@@ -1,4 +1,3 @@
-// routes/battleRoutes.js
 import express from 'express';
 import { 
   findOpponent, 
