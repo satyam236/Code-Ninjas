@@ -1,16 +1,40 @@
-// src/components/Login1.jsx (Updated for internal navigation)
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ src, alt }) => { // Removed onSubmit, onSignupClick props
-  const navigate = useNavigate(); // Get the navigate function
+const Login = ({ src, alt }) => {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null); // State for error messages
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add actual login logic here (e.g., API call)
-    console.log("Performing login...");
-    // Assuming login is successful, navigate to homepage
-    navigate('/homepage');
+
+    // Collect form data using name attributes
+    const formData = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include', // Include cookies for authentication
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+
+      // Assuming login is successful, navigate to homepage
+      navigate('/homepage');
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setError(error.message); // Display error message to user
+    }
   };
 
   const handleSignupClick = () => {
@@ -23,15 +47,17 @@ const Login = ({ src, alt }) => { // Removed onSubmit, onSignupClick props
       <h1 className="text-2xl font-bold mt-4 text-gray-800">Login</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-8 max-w-xs w-full">
-         {/* Input fields remain the same */}
+        {/* Input fields with name attributes */}
         <input
           type="email"
+          name="email" // Add name attribute
           placeholder="Email"
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
         <input
           type="password"
+          name="password" // Add name attribute
           placeholder="Password"
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
@@ -40,6 +66,9 @@ const Login = ({ src, alt }) => { // Removed onSubmit, onSignupClick props
           Login
         </button>
       </form>
+
+      {/* Display error message if any */}
+      {error && <p className="mt-4 text-red-600">{error}</p>}
 
       {/* Signup link - Uses internal handler */}
       <p className="mt-6 text-gray-700">

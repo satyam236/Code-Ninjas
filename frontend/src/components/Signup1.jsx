@@ -1,16 +1,42 @@
-// src/components/Signup1.jsx (Updated for internal navigation)
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Signup = ({ src, alt }) => { // Removed onSubmit, onLoginClick props
-  const navigate = useNavigate(); // Get the navigate function
+const Signup = ({ src, alt }) => {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null); // State for error messages
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add actual signup logic here (e.g., API call)
-    console.log("Performing signup...");
-    // Assuming signup is successful, navigate to homepage
-    navigate('/homepage');
+
+    // Collect form data
+    const formData = {
+      fullName: e.target.fullName.value,
+      username: e.target.username.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData), // Send form data as JSON
+        credentials: 'include', // Include cookies for authentication
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Signup failed');
+      }
+
+      // Navigate to homepage on successful signup
+      navigate('/homepage');
+    } catch (err) {
+      console.error('Error signing up:', err);
+      setError(err.message); // Display error message to user
+    }
   };
 
   const handleLoginClick = () => {
@@ -23,21 +49,33 @@ const Signup = ({ src, alt }) => { // Removed onSubmit, onLoginClick props
       <h1 className="text-2xl font-bold mt-4 text-gray-800">Sign Up</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-8 max-w-xs w-full">
-        {/* Input fields remain the same */}
+        {/* Input fields */}
         <input
           type="text"
+          name="fullName"
           placeholder="Full Name"
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          required // Good practice to add required
+          required
+        />
+          {/* <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-8 max-w-xs w-full"> */}
+        {/* Input fields */}
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          required
         />
         <input
           type="email"
+          name="email"
           placeholder="Email"
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
         <input
           type="password"
+          name="password"
           placeholder="Password"
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
@@ -47,7 +85,10 @@ const Signup = ({ src, alt }) => { // Removed onSubmit, onLoginClick props
         </button>
       </form>
 
-      {/* Login link - Uses internal handler */}
+      {/* Display error message if any */}
+      {error && <p className="mt-4 text-red-600">{error}</p>}
+
+      {/* Login link */}
       <p className="mt-6 text-gray-700">
         Already have an account?{' '}
         <span onClick={handleLoginClick} className="text-blue-600 font-semibold hover:underline cursor-pointer">

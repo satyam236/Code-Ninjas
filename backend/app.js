@@ -5,16 +5,26 @@ import gameRoutes from './routes/gameRoutes.js';
 import authRoutes from './routes/auth.js';
 import battleRoutes from './routes/battleRoutes.js';
 import leaderboardRoutes from './routes/leaderboardRoutes.js';
-// import { handleFriendlyBattleSocket } from './utils/socketHandlers.js';
-// import { createServer } from 'http';
-// import { Server } from 'socket.io';
+import cors from 'cors';
 
 const app = express();
-// const httpServer = createServer(app);
-// const io = new Server(httpServer);
 
-// Handle WebSocket connections
-// handleFriendlyBattleSocket(io);
+
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+
+const corsOptions = {
+  origin: CLIENT_ORIGIN,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 204,
+  maxAge: 86400 
+};
+
+
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions)); 
 
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -25,22 +35,21 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
-// Security Headers Middleware
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
 
-// Body Parser Middleware
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true, 
-  autoIndex: NODE_ENV === 'development', // Enable indexing only in dev mode
+  autoIndex: NODE_ENV === 'development', 
 }).then(() => console.log('✅ MongoDB connected'))
   .catch((err) => {
     console.error('❌ Database connection error:', err);
@@ -60,7 +69,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Error Handling Middleware
+
 app.use((err, req, res, next) => {
   console.error(`[${new Date().toISOString()}] ❌ Error:`, err);
   res.status(500).json({
@@ -75,6 +84,15 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running in ${NODE_ENV} mode on port ${PORT}`);
 });
 
-// httpServer.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// }); 
+const shutdown = (signal) => {
+  console.log(`\n🔻 ${signal} received: Closing server...`);
+  server.close(async () => {
+    console.log('✅ Server closed');
+    await mongoose.disconnect();
+    console.log('✅ Database disconnected');
+    process.exit(0);
+  });
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown); 
