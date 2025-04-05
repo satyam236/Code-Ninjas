@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Sidebarright = () => {
   // User profile data
@@ -7,18 +8,20 @@ const Sidebarright = () => {
     avatar: "https://i.imgur.com/4M34hi2.png", // Generic anime avatar
     level: 99,
     trophies: 25,
-    badges: 12,
   };
 
   // State to manage trophy count visibility
   const [showTrophyCount, setShowTrophyCount] = useState(false);
 
+  const navigate = useNavigate(); // Hook for navigation
+
   return (
-    <div className="fixed top-4 right-4 w-20 p-3 flex flex-col items-center gap-8 text-white z-50">
+    <div className="fixed top-4 right-4 flex flex-col items-center gap-8 text-white z-50">
       {/* User Profile Icon */}
       <div
-        className={`rounded-full overflow-hidden border-2 border-yellow-400 shadow-md w-14 h-14 transition-transform duration-200 ease-in-out hover:scale-110`}
+        className={`rounded-full overflow-hidden border-2 border-yellow-400 shadow-md w-14 h-14 transition-transform duration-200 ease-in-out hover:scale-110 cursor-pointer`}
         title={`${user.name} - Level ${user.level}`}
+        onClick={() => navigate("/profile")} // Navigate to Profile page on click
       >
         <img
           src={user.avatar}
@@ -27,28 +30,36 @@ const Sidebarright = () => {
         />
       </div>
 
-      {/* Trophies Button */}
-      <div
-        className={`bg-yellow-500/30 rounded-xl p-2 flex items-center justify-center shadow-md backdrop-blur-sm w-14 h-14 transition-transform duration-200 ease-in-out hover:scale-110 cursor-pointer`}
-        title={`${user.trophies} Trophies`}
-        onClick={() => setShowTrophyCount(!showTrophyCount)} // Toggle trophy count visibility
-      >
-        <span className="text-3xl">🏆</span>
+      {/* Trophies Section */}
+      <div className="relative flex items-center">
+        {/* Trophies Button */}
+        <div
+          className={`bg-yellow-300/30 rounded-xl p-2 flex items-center justify-center shadow-md backdrop-blur-sm w-14 h-14 transition-transform duration-200 ease-in-out hover:scale-110 cursor-pointer`}
+          title={`${user.trophies} Trophies`}
+          onClick={() => setShowTrophyCount(!showTrophyCount)} // Toggle trophy count visibility
+        >
+          <span className="text-3xl">🏆</span>
+        </div>
+
+        {/* Trophy Count Section */}
+        {showTrophyCount && (
+          <div
+            className="absolute right-[4.5rem] bg-yellow-200 text-black py-[0.5rem] px-[0.8rem] rounded-lg shadow-md text-sm font-bold"
+            style={{ height: "3rem" }} // Slightly smaller than button height
+            title="Number of Trophies"
+          >
+            {user.trophies}
+          </div>
+        )}
       </div>
 
-      {/* Trophy Count Popup */}
-      {showTrophyCount && (
-        <div className="absolute top-[6rem] right-[5rem] bg-yellow-500 text-black p-4 rounded-lg shadow-lg text-center animate-fade-in">
-          <p className="text-lg font-bold">🏆 Trophies: {user.trophies}</p>
-        </div>
-      )}
-
-      {/* Badges Button */}
+      {/* 2 Player Button */}
       <div
-        className={`bg-yellow-500/30 rounded-xl p-2 flex items-center justify-center shadow-md backdrop-blur-sm w-14 h-14 transition-transform duration-200 ease-in-out hover:scale-110`}
-        title={`${user.badges} Badges`}
+        className={`bg-yellow-300/30 rounded-xl p-2 flex items-center justify-center shadow-md backdrop-blur-sm w-14 h-14 transition-transform duration-200 ease-in-out hover:scale-110 cursor-pointer`}
+        title="2 Player Mode"
+        onClick={() => navigate("/2player")} // Navigate to 2 Player page on click
       >
-        <span className="text-3xl">🥇</span>
+        <span className="text-xl font-bold">⚔️</span>
       </div>
     </div>
   );

@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom'; // <--- Import useNavigate
 const initialData = [
   { id: 1, name: "Alice", score: 98, avatar: "https://i.pravatar.cc/150?img=1" },
   { id: 2, name: "Bob", score: 89, avatar: "https://i.pravatar.cc/150?img=2" },
+  { id: 3, name: 'Charlie', score: 75, avatar: 'https://i.pravatar.cc/150?img=3' },
+  { id: 4, name: 'Diana', score: 64, avatar: 'https://i.pravatar.cc/150?img=4' },
+  { id: 5, name: 'Eve', score: 45, avatar: 'https://i.pravatar.cc/150?img=5' },
   // ... more players
 ];
 const medalEmojis = ["🥇", "🥈", "🥉"];
