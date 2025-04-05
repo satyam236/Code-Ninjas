@@ -24,7 +24,7 @@ const HomePage = () => {
 
       {/* Footer Section (Optional) */}
       <footer className="absolute bottom-4 left-0 right-0 text-center text-white z-30">
-        <p className="text-sm opacity-75">© 2025 Multi-Anime Universe. All Rights Reserved.</p>
+        <p className="text-sm opacity-75">© 2025 Code Ninjas. All Rights Reserved.</p>
       </footer>
     </div>
   );

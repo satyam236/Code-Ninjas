@@ -30,7 +30,7 @@ const Centre = () => {
           drop-shadow-lg animate-bounce
         `}
       >
-        Multi-Anime Universe
+        Number Pokemon
       </h1>
 
       {/* Play New Game Button */}

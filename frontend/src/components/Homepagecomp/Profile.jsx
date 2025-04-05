@@ -1,163 +1,193 @@
-import React, { useState, useEffect } from 'react';
-// Import useNavigate if using React Router
-import { useNavigate } from 'react-router-dom'; // <--- Add this import
+import React, { useState, useEffect } from "react";
+// Removed CSS import: import "./App.css"; // Or the renamed CSS file
 
-// Constants for LocalStorage keys
-const LOCALSTORAGE_USERNAME_KEY = 'username';
-const LOCALSTORAGE_AVATAR_KEY = 'avatar';
-const LOCALSTORAGE_THEME_KEY = 'theme'; // Added key for theme persistence
-
+// --- Data (remains the same) ---
 const avatarList = [
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=Spiderman",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=Ironman",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=Thor",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=WonderWoman",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=Hulk",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=Deadpool"
+  "https://platform.polygon.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24458108/captain_pikachu.jpg?quality=90&strip=all&crop=7.8125,0,84.375,100",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXzZfFLLZ0j7Y11fCqWITLQDRQm0CrOZT6iA&s",
+  "https://i.pinimg.com/564x/68/09/ab/6809ab885ff3878a939bd307cfbfec2d.jpg",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPj5Rg21GqUBxemt0kFPE-1_9bdqJJ0e1ieg&s",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-77UzkSh1n7ueLBHQBZNejYVF3aQTSY38vw&s",
+  "https://in.portal-pokemon.com/play/resources/pokedex/img/pm/0aa78a0061bda9d88cbb0bbf739cd9cc56522fe9.png"
 ];
 
-// Theme styles mapping using Tailwind classes (assuming this is defined as before)
-const themeStyles = {
-  neon: { /* ...styles */ container: "bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-cyan-300", card: "bg-black/40 border-cyan-400/30 shadow-cyan-500/40", cardText: "text-cyan-300", avatarBorder: "border-cyan-300", input: "bg-white/10 border-cyan-400/30 placeholder:text-cyan-300/60 focus:border-cyan-300", saveButton: "bg-cyan-500/20 border-cyan-400 hover:bg-cyan-500/30 hover:shadow-cyan-400/50", logoutButton: "bg-red-500/20 border-red-500 hover:bg-red-500/30 hover:shadow-red-500/50", selectedAvatar: "border-cyan-300 shadow-cyan-400/60", selectorText: "text-cyan-300", backButton: "text-cyan-300 border-cyan-400/50 hover:bg-white/10" },
-  frost: { /* ...styles */ container: "bg-gradient-to-br from-[#e0eafc] via-[#cfdef3] to-[#e0eafc] text-gray-800", card: "bg-white/50 border-gray-400/30 shadow-gray-500/20", cardText: "text-gray-800", avatarBorder: "border-gray-600", input: "bg-black/5 border-gray-400/30 placeholder:text-gray-800/60 focus:border-blue-500", saveButton: "bg-blue-500/70 border-blue-600 text-white hover:bg-blue-600 hover:shadow-blue-400/50", logoutButton: "bg-red-600/70 border-red-700 text-white hover:bg-red-700 hover:shadow-red-500/50", selectedAvatar: "border-blue-500 shadow-blue-500/50", selectorText: "text-gray-800", backButton: "text-gray-700 border-gray-400/50 hover:bg-black/5" },
-  inferno: { /* ...styles */ container: "bg-gradient-to-br from-[#ff4e50] via-[#f9d423] to-[#ff4e50] text-yellow-900", card: "bg-white/30 border-orange-300/50 shadow-orange-400/40", cardText: "text-yellow-900", avatarBorder: "border-red-500", input: "bg-white/30 border-orange-400/50 placeholder:text-yellow-900/60 focus:border-red-500", saveButton: "bg-red-500/80 border-red-600 text-white hover:bg-red-600 hover:shadow-red-400/50", logoutButton: "bg-gray-800/70 border-gray-900 text-white hover:bg-gray-900 hover:shadow-black/50", selectedAvatar: "border-red-500 shadow-red-500/50", selectorText: "text-yellow-950", backButton: "text-yellow-950 border-orange-600/50 hover:bg-white/20" },
-  jungle: { /* ...styles */ container: "bg-gradient-to-br from-[#134e4a] via-[#2dd4bf] to-[#134e4a] text-teal-100", card: "bg-teal-900/50 border-teal-400/40 shadow-teal-500/30", cardText: "text-teal-100", avatarBorder: "border-teal-300", input: "bg-white/10 border-teal-400/40 placeholder:text-teal-100/60 focus:border-teal-300", saveButton: "bg-teal-500/30 border-teal-400 hover:bg-teal-500/40 hover:shadow-teal-400/50", logoutButton: "bg-orange-600/30 border-orange-500 hover:bg-orange-600/40 hover:shadow-orange-500/50", selectedAvatar: "border-teal-300 shadow-teal-400/50", selectorText: "text-teal-100", backButton: "text-teal-100 border-teal-400/50 hover:bg-white/10" }
+const themePokemon = {
+  synthwave: {
+    left: "https://img.pokemondb.net/artwork/large/mewtwo.jpg",
+    right: "https://img.pokemondb.net/artwork/large/mewtwo.jpg"
+  },
+  retro: {
+    left: "https://img.pokemondb.net/artwork/large/pikachu.jpg",
+    right: "https://img.pokemondb.net/artwork/large/pikachu.jpg"
+  },
+  alien: {
+    left: "https://img.pokemondb.net/artwork/large/deoxys.jpg",
+    right: "https://img.pokemondb.net/artwork/large/deoxys.jpg"
+  },
+  shadow: {
+    left: "https://img.pokemondb.net/artwork/large/darkrai.jpg",
+    right: "https://img.pokemondb.net/artwork/large/darkrai.jpg"
+  }
 };
 
-
+// --- Component Renamed ---
 export default function Profile() {
-  const [username, setUsername] = useState('HeroPlayer');
-  const [theme, setTheme] = useState('neon'); // Default theme
+  // --- State & Effects (remain the same) ---
+  const [username, setUsername] = useState("CyberPlayer");
+  const [theme, setTheme] = useState("synthwave"); // Default theme
   const [avatar, setAvatar] = useState(avatarList[0]);
 
-  // Initialize navigate hook (requires react-router-dom)
-  const navigate = useNavigate(); // <--- Initialize hook
-
   useEffect(() => {
-    const savedName = localStorage.getItem(LOCALSTORAGE_USERNAME_KEY);
-    const savedAvatar = localStorage.getItem(LOCALSTORAGE_AVATAR_KEY);
-    const savedTheme = localStorage.getItem(LOCALSTORAGE_THEME_KEY); // Load theme
+    // Load saved data from localStorage on initial render
+    const savedName = localStorage.getItem("username");
+    const savedAvatar = localStorage.getItem("avatar");
+    // Optionally load saved theme
+    const savedTheme = localStorage.getItem("theme");
+
     if (savedName) setUsername(savedName);
     if (savedAvatar) setAvatar(savedAvatar);
-    if (savedTheme && themeStyles[savedTheme]) setTheme(savedTheme); // Set loaded theme
+    if (savedTheme && themePokemon[savedTheme]) setTheme(savedTheme); // Load theme if valid
+
   }, []);
 
+  // --- Handlers (remain the same, added theme saving) ---
   const handleThemeChange = (e) => {
-      const newTheme = e.target.value;
-      setTheme(newTheme);
-      localStorage.setItem(LOCALSTORAGE_THEME_KEY, newTheme); // Save theme preference
-  }
+    setTheme(e.target.value);
+    localStorage.setItem("theme", e.target.value); // Save theme change immediately
+  };
 
   const handleSave = () => {
-    localStorage.setItem(LOCALSTORAGE_USERNAME_KEY, username);
-    localStorage.setItem(LOCALSTORAGE_AVATAR_KEY, avatar);
-    alert('Profile saved!');
+    localStorage.setItem("username", username);
+    localStorage.setItem("avatar", avatar);
+    localStorage.setItem("theme", theme); // Ensure theme is saved on explicit save too
+    alert("✅ Profile saved!");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem(LOCALSTORAGE_USERNAME_KEY);
-    localStorage.removeItem(LOCALSTORAGE_AVATAR_KEY);
-    localStorage.removeItem(LOCALSTORAGE_THEME_KEY); // Remove theme
-    setUsername('HeroPlayer');
-    setAvatar(avatarList[0]);
-    setTheme('neon'); // Reset theme to default
-    alert('Logged out!');
-    // Optional: Navigate to login or home page after logout
-    // navigate('/login');
+    localStorage.clear(); // Clear all saved data
+    setUsername("CyberPlayer"); // Reset to default username
+    setAvatar(avatarList[0]); // Reset to default avatar
+    setTheme("synthwave"); // Reset to default theme
+    alert("🚪 Logged out!");
   };
 
-  // Back button handler
-  const handleBack = () => {
-    navigate(-1); // Go back to the previous page in history
-    // If not using react-router, replace with your navigation logic:
-    // e.g., onBackProp();
+  const pokemon = themePokemon[theme];
+
+  // --- Theme Styling Logic ---
+  const getThemeClasses = () => {
+    switch (theme) {
+      case "retro":
+        // Tailwind doesn't have a direct utility for repeating gradients, use arbitrary property
+        return "bg-[repeating-linear-gradient(45deg,#2b2b2b,#2b2b2b_10px,#3d3d3d_10px,#3d3d3d_20px)] text-[#00ff99]";
+      case "alien":
+        return "bg-gradient-to-br from-[#000428] to-[#004e92] text-[#00ffcc]";
+      case "shadow":
+        return "bg-gradient-to-r from-[#232526] to-[#414345] text-[#f5f5f5]";
+      case "synthwave":
+      default:
+        return "bg-gradient-to-r from-[#0f0c29] via-[#302b63] to-[#24243e] text-white";
+    }
   };
 
-  const currentThemeStyles = themeStyles[theme] || themeStyles.neon;
-
+  // --- Main Render using Tailwind ---
   return (
-    <div className={`relative flex flex-col items-center justify-center min-h-screen w-screen transition-colors duration-400 ${currentThemeStyles.container}`}>
-      {/* Top Right Controls Container */}
-      <div className="absolute top-5 right-5 sm:right-8 flex items-center gap-4 z-20">
-         {/* Back Button */}
-         <button
-            onClick={handleBack}
-            // Apply theme-specific or neutral styling
-            className={`px-3 py-1 rounded-md border text-sm font-medium transition-colors duration-200 ${currentThemeStyles.backButton}`}
-            title="Go Back" // Tooltip
-         >
-            {/* Using ← arrow character, replace with SVG icon if preferred */}
-            ← Back
-         </button>
-
-         {/* Theme Selector */}
-         <div className="text-sm flex items-center">
-             <label className={`${currentThemeStyles.selectorText} mr-2 hidden sm:inline`}>🎨 Theme:</label> {/* Hide label on very small screens */}
-             <select
-                value={theme}
-                onChange={handleThemeChange}
-                className={`px-2 py-1 rounded bg-black/20 text-inherit border border-white/20 backdrop-blur-sm appearance-none ${currentThemeStyles.selectorText}`} // Use theme text color
-             >
-                <option value="neon">🌌 Neon</option>
-                <option value="frost">🧊 Frost</option>
-                <option value="inferno">🔥 Inferno</option>
-                <option value="jungle">🍃 Jungle</option>
-             </select>
-         </div>
+    // App Container: Full screen, flex column, centered, themed background/text
+    <div
+      className={`w-screen h-screen flex flex-col justify-center items-center overflow-hidden transition-colors duration-300 ease-in-out font-[Orbitron] ${getThemeClasses()}`}
+    >
+      {/* Theme Selector: Absolute position top right */}
+      <div className="absolute top-5 right-[30px] z-[100] text-sm">
+        <label className="align-middle">🎨 Theme:</label>
+        <select
+          value={theme}
+          onChange={handleThemeChange}
+          // Select styling: Mimics original CSS
+          className="ml-2.5 p-[0.4rem] text-base bg-[#111] text-[#0ff] border-2 border-[#0ff] rounded-lg align-middle appearance-none focus:outline-none focus:ring-1 focus:ring-[#0ff]"
+        >
+          <option value="synthwave">🌃 Synthwave</option>
+          <option value="retro">🕹️ Retro Pixel</option>
+          <option value="alien">👾 Alien Tech</option>
+          <option value="shadow">🖤 Shadow Core</option>
+        </select>
       </div>
 
-      {/* Account Card */}
-      <div
-        className={`relative z-10 bg-opacity-40 backdrop-filter backdrop-blur-lg p-8 rounded-2xl border shadow-lg max-w-md w-[90%] text-center transition-all duration-300 ${currentThemeStyles.card}`}
-      >
-        <h1 className={`text-2xl font-bold mb-6 ${currentThemeStyles.cardText}`}>
-          Player Account
-        </h1>
+      {/* Pokemon Wrapper: Flex row, centered, responsive wrap */}
+      <div className="w-full flex items-center justify-center gap-8 flex-wrap px-4"> {/* Added padding for smaller screens */}
+
+        {/* Left Pokemon */}
         <img
-          src={avatar}
-          alt="avatar"
-          className={`w-32 h-32 rounded-full border-4 ${currentThemeStyles.avatarBorder} mb-4 bg-white object-cover mx-auto shadow-md`}
+          src={pokemon.left}
+          alt="left-pokemon"
+          // Side Pokemon styling: size, rounded, shadow, rotation, transition
+          className="w-[150px] h-auto max-h-[250px] rounded-[20px] object-contain shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 ease-in-out -rotate-3 hidden md:block" // Hide on small screens
         />
-        <h2 className={`text-xl font-semibold mb-4 ${currentThemeStyles.cardText}`}>
-          {username}
-        </h2>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter username"
-          className={`px-4 py-2 rounded-lg border text-center w-4/5 mx-auto text-lg ${currentThemeStyles.cardText} ${currentThemeStyles.input} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent`}
-        />
-        <div className="flex flex-wrap gap-3 sm:gap-4 justify-center mt-6 mb-2">
-          {avatarList.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`avatar-${index}`}
-              className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full cursor-pointer transition-all duration-200 ease-in-out border-2 bg-white hover:scale-110 hover:shadow-md ${
-                avatar === img
-                  ? `${currentThemeStyles.selectedAvatar} shadow-lg scale-105`
-                  : 'border-transparent'
-              }`}
-              onClick={() => setAvatar(img)}
-            />
-          ))}
+
+        {/* Account Card: Centered content, themed border/shadow */}
+        <div
+         className="bg-black/70 border-[3px] border-[#00ffff] p-8 rounded-[20px] w-[90%] max-w-[500px] text-center shadow-[0_0_20px_#00ffff] relative flex flex-col items-center" // Added flex/items-center
+        >
+          <h1 className="text-2xl font-bold mb-2">🧑‍💻 Player Account</h1> {/* Adjusted margin */}
+
+          {/* Main Avatar: Centered, rounded, border */}
+          <img
+             src={avatar}
+             alt="avatar"
+             className="w-[120px] h-[120px] rounded-full my-4 border-[3px] border-[#00ffff] object-cover bg-white" // Removed mx-auto (already centered by parent flex)
+           />
+
+          {/* Username Display */}
+          <h2 className="text-xl font-semibold mb-2">{username}</h2> {/* Added margin */}
+
+          {/* Username Input: Centered, styled */}
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="p-2 text-base my-4 w-[80%] rounded-lg border-2 border-[#00ffff] text-center bg-black text-[#00ffff] focus:outline-none focus:ring-1 focus:ring-[#00ffff]" // Removed mx-auto
+          />
+
+          {/* Avatar Grid: Responsive grid layout */}
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(60px,1fr))] gap-2.5 my-4 w-full px-2"> {/* Added w-full/padding */}
+            {avatarList.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`avatar-${index}`}
+                // Avatar Option styling: size, rounded, hover/selected states
+                className={`w-[60px] h-[60px] rounded-full cursor-pointer object-cover border-2 bg-white transition-all duration-200 ease-in-out justify-self-center ${ // Added justify-self-center
+                  avatar === img
+                    ? "border-[#00ffff] shadow-[0_0_10px_#00ffff] scale-105" // Selected state
+                    : "border-transparent hover:scale-105 hover:border-[#00ffff]/50" // Default and hover state
+                }`}
+                onClick={() => setAvatar(img)}
+              />
+            ))}
+          </div>
+
+          {/* Action Buttons: Centered row */}
+          <div className="flex justify-center gap-4 mt-2"> {/* Added mt-2 */}
+             <button
+               className="bg-[#00ffff] text-black border-none px-[1.2rem] py-[0.7rem] text-base rounded-[12px] m-2 cursor-pointer transition-all duration-300 ease-in-out hover:bg-[#00cccc] hover:scale-105"
+               onClick={handleSave}
+             >
+               💾 Save
+             </button>
+             <button
+               className="bg-[#00ffff] text-black border-none px-[1.2rem] py-[0.7rem] text-base rounded-[12px] m-2 cursor-pointer transition-all duration-300 ease-in-out hover:bg-[#00cccc] hover:scale-105"
+               onClick={handleLogout}
+             >
+               🚪 Logout
+             </button>
+          </div>
         </div>
 
-        <div className="mt-6 flex flex-col sm:flex-row justify-center gap-4">
-          <button
-            className={`px-5 py-2 rounded-lg font-bold shadow-md border transition-all duration-200 ease-in-out hover:shadow-lg ${currentThemeStyles.saveButton}`}
-            onClick={handleSave}
-          >
-            💾 Save
-          </button>
-          <button
-            className={`px-5 py-2 rounded-lg font-bold shadow-md border transition-all duration-200 ease-in-out hover:shadow-lg ${currentThemeStyles.logoutButton}`}
-            onClick={handleLogout}
-          >
-            🚪 Logout
-          </button>
-        </div>
+        {/* Right Pokemon */}
+        <img
+          src={pokemon.right}
+          alt="right-pokemon"
+          // Side Pokemon styling: size, rounded, shadow, rotation, transition
+           className="w-[150px] h-auto max-h-[250px] rounded-[20px] object-contain shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 ease-in-out rotate-3 hidden md:block" // Hide on small screens
+        />
       </div>
     </div>
   );

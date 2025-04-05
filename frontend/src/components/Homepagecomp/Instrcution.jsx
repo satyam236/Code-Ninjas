@@ -6,9 +6,9 @@ const Instruction = () => {
 
   // Replace these URLs with the GIFs you provide
   const gifs = {
-    rules: "https://media.giphy.com/media/3o6ZsYm5P38Nv2z5FK/giphy.gif", // Example GIF
-    points: "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif", // Example GIF
-    playGame: "https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif", // Example GIF
+    rules: "https://i.pinimg.com/originals/02/0c/96/020c966afcc1bc1a93ee1ff4511f512c.gif", // Example GIF
+    points: "https://i.pinimg.com/originals/10/d5/91/10d59117c43360f3642b64efde4484bd.gif", // Example GIF
+    playGame: "https://cdn.dribbble.com/userupload/42496707/file/original-1648c9a929b360270d79cdcca18f346a.gif", // Example GIF
   };
 
   const goBack = () => {
