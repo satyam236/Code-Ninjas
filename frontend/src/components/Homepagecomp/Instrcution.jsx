@@ -47,15 +47,14 @@ const Instruction = () => {
           {/* text-center on small, md:text-left on medium+, flex-grow allows text block to take remaining width */}
           <div className="text-center md:text-left flex-grow">
             <h2 className="text-2xl lg:text-3xl font-semibold text-green-400 mb-4">
-              Game Rules
+            Game Objective
             </h2>
             <p className="text-lg">
               Learn how to play the game:
               <ul className="list-disc list-inside mt-2 space-y-1 text-base">
-                <li>Choose your favorite character.</li>
-                <li>Follow the instructions on the screen.</li>
-                <li>Complete objectives to earn points.</li>
-                <li>Play fair and have fun!</li>
+                <li>Combine 6 numbers (1-9) using +, -, *, /, ^, () to reach exactly 100.</li>
+                <li>Level Progression	Levels 1-5: Basic ops; Levels 6-10: Parentheses; Levels 11-30: Exponents.</li>
+                <li>Win the game to unlock the next level.</li>
               </ul>
             </p>
           </div>
@@ -70,16 +69,28 @@ const Instruction = () => {
           />
           <div className="text-center md:text-left flex-grow">
             <h2 className="text-2xl lg:text-3xl font-semibold text-blue-400 mb-4">
-              Pointing/Trophy System
+              Trophy System
             </h2>
             <p className="text-lg">
-              Here's how you can earn points and trophies:
+              Here's how you can earn  trophies:
               <ul className="list-disc list-inside mt-2 space-y-1 text-base">
-                <li>Win battles to earn 10 points.</li>
-                <li>Special moves give bonus points!</li>
-                <li>Earn trophies by completing challenges.</li>
-                <li>Climb the leaderboard to become the champion!</li>
-              </ul>
+                <li>Level 1 (Very Forgiving):
+First attempt: +6 🏆
+Second attempt: +4 🏆
+Third attempt: +3 🏆
+Fourth attempt: +1 🏆 (Added 4th attempt reward)
+Penalty per wrong attempt: -1 🏆</li>
+                <li>Level 2 (Standard):
+First attempt: +7 🏆
+Second attempt: +4 🏆
+Third attempt: +2 🏆
+Penalty per wrong attempt: -2 🏆</li>
+                <li>Level 3 (Strict Penalty):
+First attempt: +9 🏆
+Second attempt: +5 🏆
+Third attempt: +3 🏆
+Penalty per wrong attempt: -5 🏆 (High penalty)</li>
+                 </ul>
             </p>
           </div>
         </div>
@@ -98,9 +109,9 @@ const Instruction = () => {
             <p className="text-lg">
               Follow these steps to start playing:
               <ul className="list-disc list-inside mt-2 space-y-1 text-base">
-                <li>Click "Play Game" on the homepage.</li>
-                <li>Select your favorite anime universe.</li>
-                <li>Start your adventure and enjoy!</li>
+                <li>Pick a Level: Click Lv. 1, 2, or 3 to start the timed challenge.</li>
+                <li>Make 100: Add operators (+, -, ×, etc.) to the digits to reach 100.</li>
+                <li>Check or Reset: Hit "Check Solution" or use "Reset"/"New Number" to try again.</li>
               </ul>
             </p>
           </div>

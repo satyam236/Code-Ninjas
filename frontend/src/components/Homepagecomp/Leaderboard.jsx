@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom'; // <--- Import useNavigate
 
 // ... (initialData, medalEmojis remain the same) ...
 const initialData = [
-  { id: 1, name: "Alice", score: 98, avatar: "https://i.pravatar.cc/150?img=1" },
-  { id: 2, name: "Bob", score: 89, avatar: "https://i.pravatar.cc/150?img=2" },
-  { id: 3, name: 'Charlie', score: 75, avatar: 'https://i.pravatar.cc/150?img=3' },
-  { id: 4, name: 'Diana', score: 64, avatar: 'https://i.pravatar.cc/150?img=4' },
-  { id: 5, name: 'Eve', score: 45, avatar: 'https://i.pravatar.cc/150?img=5' },
+  { id: 1, name: "Dubey", score: 18, avatar:
+  "https://platform.polygon.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24458108/captain_pikachu.jpg?quality=90&strip=all&crop=7.8125,0,84.375,100" },
+  { id: 2, name: "Sharma", score: 13, avatar: "https://i.pinimg.com/564x/68/09/ab/6809ab885ff3878a939bd307cfbfec2d.jpg" },
+  { id: 3, name: 'Happy', score: 12, avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPj5Rg21GqUBxemt0kFPE-1_9bdqJJ0e1ieg&s' },
+  { id: 4, name: 'adarsh', score: 11, avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-77UzkSh1n7ueLBHQBZNejYVF3aQTSY38vw&s' },
+  { id: 5, name: 'Himanshu', score: 8, avatar: 'https://in.portal-pokemon.com/play/resources/pokedex/img/pm/0aa78a0061bda9d88cbb0bbf739cd9cc56522fe9.png' },
   // ... more players
 ];
 const medalEmojis = ["🥇", "🥈", "🥉"];

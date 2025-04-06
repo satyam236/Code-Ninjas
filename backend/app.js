@@ -6,7 +6,7 @@ import authRoutes from './routes/auth.js';
 import battleRoutes from './routes/battleRoutes.js';
 import leaderboardRoutes from './routes/leaderboardRoutes.js';
 import cors from 'cors';
-
+import userrouter from './routes/auth.js';
 const app = express(); 
  
 
@@ -34,13 +34,13 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('X-Content-Type-Options', 'nosniff');
+//   res.setHeader('X-Frame-Options', 'DENY');
+//   res.setHeader('X-XSS-Protection', '1; mode=block');
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+//   next();
+// });
 
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
@@ -55,43 +55,53 @@ mongoose.connect(MONGODB_URI, {
     process.exit(1);
   });
 
-app.use('/game', gameRoutes);
-app.use('/auth', authRoutes);
-app.use('/battle', battleRoutes);
-app.use('/leaderboard', leaderboardRoutes);
+// app.use('/game', gameRoutes);
+// app.use('/auth', authRoutes);
+// app.use('/battle', battleRoutes);
+// app.use('/leaderboard', leaderboardRoutes);
 
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'ok', 
-    environment: NODE_ENV,
-    timestamp: new Date().toISOString(),
-  });
-});
+// app.get('/health', (req, res) => {
+//   res.status(200).json({
+//     status: 'ok', 
+//     environment: NODE_ENV,
+//     timestamp: new Date().toISOString(),
+//   });
+// });
 
 
-app.use((err, req, res, next) => {
-  console.error(`[${new Date().toISOString()}] ❌ Error:`, err);
-  res.status(500).json({
-    status: 'error',
-    message: NODE_ENV === 'production' 
-      ? 'Internal server error' 
-      : err.message,
-  });
-});
+// app.use((err, req, res, next) => {
+//   console.error(`[${new Date().toISOString()}] ❌ Error:`, err);
+//   res.status(500).json({
+//     status: 'error',
+//     message: NODE_ENV === 'production' 
+//       ? 'Internal server error' 
+//       : err.message,
+//   });
+// });
 
+console.log("aaya hu otherroutes ke section mein maa ke khane ki kasam ");
 app.listen(PORT, () => {
   console.log(`🚀 Server running in ${NODE_ENV} mode on port ${PORT}`);
 });
 
-const shutdown = (signal) => {
-  console.log(`\n🔻 ${signal} received: Closing server...`);
-  server.close(async () => {
-    console.log('✅ Server closed');
-    await mongoose.disconnect();
-    console.log('✅ Database disconnected');
-    process.exit(0);
-  });
-};
+// const shutdown = (signal) => {
+//   console.log(`\n🔻 ${signal} received: Closing server...`);
+//   server.close(async () => {
+//     console.log('✅ Server closed');
+//     await mongoose.disconnect();
+//     console.log('✅ Database disconnected');
+//     process.exit(0);
+//   });
+// };
 
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown); 
+// process.on('SIGINT', shutdown);
+// process.on('SIGTERM', shutdown); 
+
+
+
+// 
+
+
+app.use('/user', userrouter);
+
+console.log("aaya hu otherroutes ke section mein maa ke khane ki kasam ");

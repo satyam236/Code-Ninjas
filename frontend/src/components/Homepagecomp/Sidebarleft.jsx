@@ -35,14 +35,7 @@ const Sideleft = () => {
         <span className="text-3xl text-yellow-400">🏆</span>
       </div>
 
-      {/* Play with Friends Icon */}
-      <div
-        className={`bg-teal-900/70 rounded-xl p-3 flex items-center justify-center shadow-md backdrop-blur-sm ${iconSizeClass} transition-transform duration-200 ease-in-out hover:scale-110 cursor-pointer`}
-        onClick={handlePlayFriendsClick}
-        title="Play with Friends"
-      >
-        <span className="text-3xl text-green-400">🎮</span>
-      </div>
+     
 
       {/* Settings Icon */}
       <div

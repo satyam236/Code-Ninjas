@@ -1,5 +1,6 @@
+// src/Profile.jsx
 import React, { useState, useEffect } from "react";
-// Removed CSS import: import "./App.css"; // Or the renamed CSS file
+import { useNavigate } from 'react-router-dom';
 
 // --- Data (remains the same) ---
 const avatarList = [
@@ -30,45 +31,47 @@ const themePokemon = {
   }
 };
 
-// --- Component Renamed ---
 export default function Profile() {
-  // --- State & Effects (remain the same) ---
+  const navigate = useNavigate(); // Get the navigate function
+
+  // --- State & Effects ---
   const [username, setUsername] = useState("CyberPlayer");
-  const [theme, setTheme] = useState("synthwave"); // Default theme
+  const [theme, setTheme] = useState("synthwave");
   const [avatar, setAvatar] = useState(avatarList[0]);
 
   useEffect(() => {
-    // Load saved data from localStorage on initial render
     const savedName = localStorage.getItem("username");
     const savedAvatar = localStorage.getItem("avatar");
-    // Optionally load saved theme
     const savedTheme = localStorage.getItem("theme");
 
     if (savedName) setUsername(savedName);
     if (savedAvatar) setAvatar(savedAvatar);
-    if (savedTheme && themePokemon[savedTheme]) setTheme(savedTheme); // Load theme if valid
+    if (savedTheme && themePokemon[savedTheme]) setTheme(savedTheme);
 
-  }, []);
+  }, []); // No need for navigate in dependency array here
 
-  // --- Handlers (remain the same, added theme saving) ---
+  // --- Handlers ---
   const handleThemeChange = (e) => {
     setTheme(e.target.value);
-    localStorage.setItem("theme", e.target.value); // Save theme change immediately
+    localStorage.setItem("theme", e.target.value);
   };
 
   const handleSave = () => {
     localStorage.setItem("username", username);
     localStorage.setItem("avatar", avatar);
-    localStorage.setItem("theme", theme); // Ensure theme is saved on explicit save too
+    localStorage.setItem("theme", theme);
     alert("✅ Profile saved!");
   };
 
   const handleLogout = () => {
-    localStorage.clear(); // Clear all saved data
-    setUsername("CyberPlayer"); // Reset to default username
-    setAvatar(avatarList[0]); // Reset to default avatar
-    setTheme("synthwave"); // Reset to default theme
+    localStorage.clear();
     alert("🚪 Logged out!");
+    navigate('/login'); // Navigate to the login page
+  };
+
+  // --- NEW Handler for Back Button ---
+  const handleBack = () => {
+    navigate(-1); // Go back one step in history
   };
 
   const pokemon = themePokemon[theme];
@@ -77,7 +80,6 @@ export default function Profile() {
   const getThemeClasses = () => {
     switch (theme) {
       case "retro":
-        // Tailwind doesn't have a direct utility for repeating gradients, use arbitrary property
         return "bg-[repeating-linear-gradient(45deg,#2b2b2b,#2b2b2b_10px,#3d3d3d_10px,#3d3d3d_20px)] text-[#00ff99]";
       case "alien":
         return "bg-gradient-to-br from-[#000428] to-[#004e92] text-[#00ffcc]";
@@ -91,18 +93,27 @@ export default function Profile() {
 
   // --- Main Render using Tailwind ---
   return (
-    // App Container: Full screen, flex column, centered, themed background/text
+    // App Container
     <div
-      className={`w-screen h-screen flex flex-col justify-center items-center overflow-hidden transition-colors duration-300 ease-in-out font-[Orbitron] ${getThemeClasses()}`}
+      className={`w-screen h-screen flex flex-col justify-center items-center overflow-hidden transition-colors duration-300 ease-in-out font-[Orbitron] relative ${getThemeClasses()}`} // Added relative positioning
     >
-      {/* Theme Selector: Absolute position top right */}
-      <div className="absolute top-5 right-[30px] z-[100] text-sm">
-        <label className="align-middle">🎨 Theme:</label>
+      {/* --- ADDED Back Button --- */}
+      <button
+        onClick={handleBack}
+        className="absolute top-5 left-5 z-[100] bg-[#00ffff]/80 text-black px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ease-in-out hover:bg-[#00ffff] hover:scale-105 shadow-md"
+        aria-label="Go back"
+      >
+        ← Back {/* Using HTML arrow entity */}
+      </button>
+
+      {/* Theme Selector */}
+      <div className="absolute top-5 right-5 sm:right-[30px] z-[100] text-sm"> {/* Adjusted right padding for consistency */}
+        <label className="align-middle hidden sm:inline">🎨 Theme:</label> {/* Hide label on very small screens */}
         <select
           value={theme}
           onChange={handleThemeChange}
-          // Select styling: Mimics original CSS
-          className="ml-2.5 p-[0.4rem] text-base bg-[#111] text-[#0ff] border-2 border-[#0ff] rounded-lg align-middle appearance-none focus:outline-none focus:ring-1 focus:ring-[#0ff]"
+          className="ml-1 sm:ml-2.5 p-[0.4rem] text-sm sm:text-base bg-[#111]/80 text-[#0ff] border-2 border-[#0ff] rounded-lg align-middle appearance-none focus:outline-none focus:ring-1 focus:ring-[#0ff]"
+          aria-label="Select theme"
         >
           <option value="synthwave">🌃 Synthwave</option>
           <option value="retro">🕹️ Retro Pixel</option>
@@ -111,69 +122,69 @@ export default function Profile() {
         </select>
       </div>
 
-      {/* Pokemon Wrapper: Flex row, centered, responsive wrap */}
-      <div className="w-full flex items-center justify-center gap-8 flex-wrap px-4"> {/* Added padding for smaller screens */}
+      {/* Pokemon Wrapper */}
+      <div className="w-full flex items-center justify-center gap-4 md:gap-8 flex-wrap px-4 pt-20 sm:pt-0"> {/* Added top padding for smaller screens to avoid overlap */}
 
         {/* Left Pokemon */}
         <img
           src={pokemon.left}
           alt="left-pokemon"
-          // Side Pokemon styling: size, rounded, shadow, rotation, transition
-          className="w-[150px] h-auto max-h-[250px] rounded-[20px] object-contain shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 ease-in-out -rotate-3 hidden md:block" // Hide on small screens
+          className="w-[120px] md:w-[150px] h-auto max-h-[200px] md:max-h-[250px] rounded-[20px] object-contain shadow-[0_0_15px_rgba(255,255,255,0.2)] md:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 ease-in-out -rotate-3 hidden md:block" // Adjusted size/shadow slightly
         />
 
-        {/* Account Card: Centered content, themed border/shadow */}
+        {/* Account Card */}
         <div
-         className="bg-black/70 border-[3px] border-[#00ffff] p-8 rounded-[20px] w-[90%] max-w-[500px] text-center shadow-[0_0_20px_#00ffff] relative flex flex-col items-center" // Added flex/items-center
+         className="bg-black/70 border-[3px] border-[#00ffff] p-6 md:p-8 rounded-[20px] w-[90%] max-w-[450px] md:max-w-[500px] text-center shadow-[0_0_15px_#00ffff] md:shadow-[0_0_20px_#00ffff] relative flex flex-col items-center" // Adjusted padding/max-width slightly
         >
-          <h1 className="text-2xl font-bold mb-2">🧑‍💻 Player Account</h1> {/* Adjusted margin */}
+          <h1 className="text-xl md:text-2xl font-bold mb-2">🧑‍💻 Player Account</h1>
 
-          {/* Main Avatar: Centered, rounded, border */}
+          {/* Main Avatar */}
           <img
              src={avatar}
              alt="avatar"
-             className="w-[120px] h-[120px] rounded-full my-4 border-[3px] border-[#00ffff] object-cover bg-white" // Removed mx-auto (already centered by parent flex)
+             className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full my-3 md:my-4 border-[3px] border-[#00ffff] object-cover bg-white" // Adjusted size/margin slightly
            />
 
           {/* Username Display */}
-          <h2 className="text-xl font-semibold mb-2">{username}</h2> {/* Added margin */}
+          <h2 className="text-lg md:text-xl font-semibold mb-2">{username}</h2>
 
-          {/* Username Input: Centered, styled */}
+          {/* Username Input */}
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="p-2 text-base my-4 w-[80%] rounded-lg border-2 border-[#00ffff] text-center bg-black text-[#00ffff] focus:outline-none focus:ring-1 focus:ring-[#00ffff]" // Removed mx-auto
+            className="p-2 text-sm md:text-base my-3 md:my-4 w-[80%] rounded-lg border-2 border-[#00ffff] text-center bg-black text-[#00ffff] focus:outline-none focus:ring-1 focus:ring-[#00ffff]" // Adjusted size/margin slightly
+            aria-label="Enter username"
           />
 
-          {/* Avatar Grid: Responsive grid layout */}
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(60px,1fr))] gap-2.5 my-4 w-full px-2"> {/* Added w-full/padding */}
+          {/* Avatar Grid */}
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(50px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(60px,1fr))] gap-2 md:gap-2.5 my-3 md:my-4 w-full px-1 md:px-2"> {/* Adjusted grid/gap/padding slightly */}
             {avatarList.map((img, index) => (
               <img
                 key={index}
                 src={img}
                 alt={`avatar-${index}`}
-                // Avatar Option styling: size, rounded, hover/selected states
-                className={`w-[60px] h-[60px] rounded-full cursor-pointer object-cover border-2 bg-white transition-all duration-200 ease-in-out justify-self-center ${ // Added justify-self-center
+                className={`w-[50px] h-[50px] md:w-[60px] md:h-[60px] rounded-full cursor-pointer object-cover border-2 bg-white transition-all duration-200 ease-in-out justify-self-center ${
                   avatar === img
-                    ? "border-[#00ffff] shadow-[0_0_10px_#00ffff] scale-105" // Selected state
+                    ? "border-[#00ffff] shadow-[0_0_8px_#00ffff] md:shadow-[0_0_10px_#00ffff] scale-105" // Selected state
                     : "border-transparent hover:scale-105 hover:border-[#00ffff]/50" // Default and hover state
                 }`}
                 onClick={() => setAvatar(img)}
+                aria-label={`Select avatar ${index + 1}`}
               />
             ))}
           </div>
 
-          {/* Action Buttons: Centered row */}
-          <div className="flex justify-center gap-4 mt-2"> {/* Added mt-2 */}
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center gap-2 md:gap-4 mt-2"> {/* Stack buttons on small screens */}
              <button
-               className="bg-[#00ffff] text-black border-none px-[1.2rem] py-[0.7rem] text-base rounded-[12px] m-2 cursor-pointer transition-all duration-300 ease-in-out hover:bg-[#00cccc] hover:scale-105"
+               className="bg-[#00ffff] text-black border-none px-[1rem] py-[0.6rem] md:px-[1.2rem] md:py-[0.7rem] text-sm md:text-base rounded-[10px] md:rounded-[12px] cursor-pointer transition-all duration-300 ease-in-out hover:bg-[#00cccc] hover:scale-105" // Adjusted padding/border-radius
                onClick={handleSave}
              >
-               💾 Save
+               💾 Save Profile
              </button>
              <button
-               className="bg-[#00ffff] text-black border-none px-[1.2rem] py-[0.7rem] text-base rounded-[12px] m-2 cursor-pointer transition-all duration-300 ease-in-out hover:bg-[#00cccc] hover:scale-105"
+               className="bg-[#f04d5a]/90 text-white border-none px-[1rem] py-[0.6rem] md:px-[1.2rem] md:py-[0.7rem] text-sm md:text-base rounded-[10px] md:rounded-[12px] cursor-pointer transition-all duration-300 ease-in-out hover:bg-[#f04d5a] hover:scale-105" // Changed color for distinction, adjusted padding/border-radius
                onClick={handleLogout}
              >
                🚪 Logout
@@ -185,8 +196,7 @@ export default function Profile() {
         <img
           src={pokemon.right}
           alt="right-pokemon"
-          // Side Pokemon styling: size, rounded, shadow, rotation, transition
-           className="w-[150px] h-auto max-h-[250px] rounded-[20px] object-contain shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 ease-in-out rotate-3 hidden md:block" // Hide on small screens
+           className="w-[120px] md:w-[150px] h-auto max-h-[200px] md:max-h-[250px] rounded-[20px] object-contain shadow-[0_0_15px_rgba(255,255,255,0.2)] md:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform duration-300 ease-in-out rotate-3 hidden md:block" // Adjusted size/shadow slightly
         />
       </div>
     </div>

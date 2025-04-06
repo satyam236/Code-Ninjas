@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Signup = ({ src, alt }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(null); // State for error messages
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("inover");
     // Collect form data
     const formData = {
       fullName: e.target.fullName.value,
@@ -15,32 +15,25 @@ const Signup = ({ src, alt }) => {
       email: e.target.email.value,
       password: e.target.password.value,
     };
-
+    console.log(formData);
     try {
-      const response = await fetch('http://localhost:3000/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData), // Send form data as JSON
-        credentials: 'include', // Include cookies for authentication
+      const response = await axios.post("http://localhost:3000/user/signup", {
+        email: formData.email,
+        fullname: formData.fullName,
+        username: formData.username,
+        password: formData.password,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Signup failed');
-      }
-
-      // Navigate to homepage on successful signup
-      navigate('/homepage');
+      console.log(response)
+      alert(response?.data?.message)
+      navigate("/homepage");
     } catch (err) {
-      console.error('Error signing up:', err);
+      console.error("Error signing up:", err);
       setError(err.message); // Display error message to user
     }
   };
 
   const handleLoginClick = () => {
-    navigate('/login'); // Navigate to login page
+    navigate("/login"); // Navigate to login page
   };
 
   return (
@@ -48,7 +41,10 @@ const Signup = ({ src, alt }) => {
       <img src={src} alt={alt} className="w-48 h-auto" />
       <h1 className="text-2xl font-bold mt-4 text-gray-800">Sign Up</h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-8 max-w-xs w-full">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col space-y-4 mt-8 max-w-xs w-full"
+      >
         {/* Input fields */}
         <input
           type="text"
@@ -57,7 +53,7 @@ const Signup = ({ src, alt }) => {
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
-          {/* <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-8 max-w-xs w-full"> */}
+        {/* <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-8 max-w-xs w-full"> */}
         {/* Input fields */}
         <input
           type="text"
@@ -80,7 +76,10 @@ const Signup = ({ src, alt }) => {
           className="p-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
-        <button type="submit" className="p-2.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer">
+        <button
+          type="submit"
+          className="p-2.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+        >
           Sign Up
         </button>
       </form>
@@ -90,8 +89,13 @@ const Signup = ({ src, alt }) => {
 
       {/* Login link */}
       <p className="mt-6 text-gray-700">
-        Already have an account?{' '}
-        <span onClick={handleLoginClick} className="text-blue-600 font-semibold hover:underline cursor-pointer">
+        Already have an account?{" "}
+        <span
+          onClick={() => {
+            handleLoginClick;
+          }}
+          className="text-blue-600 font-semibold hover:underline cursor-pointer"
+        >
           Login
         </span>
       </p>

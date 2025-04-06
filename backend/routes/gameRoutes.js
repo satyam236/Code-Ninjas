@@ -11,6 +11,8 @@ import {
   quitLevel
 } from '../controllers/gameController.js';
 
+import { getProgress } from '../controllers/gameController.js';
+
 const router = express.Router();
 
 router.post('/start', startGame);
@@ -23,5 +25,7 @@ router.post('/profile', getProfile);
 router.post('/hint', getHint);
 router.post('/quit', quitLevel);
 
+
+router.get('/progress', getProgress);
 
 export default router;
